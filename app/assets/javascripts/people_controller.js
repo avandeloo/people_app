@@ -11,15 +11,18 @@
 
     $scope.addPerson = function(newName, newBio) {
       var person = {
-                        name: newName,
-                        bio: newBio,
-                        bioVisible: false
-                       }
-      $scope.people.push(person);
-      $scope.newPersonName = null;
-      $scope.newPersonBio = null;
+                      name: newName,
+                      bio: newBio
+                    };
+      $http.post('/api/v1/people.json', person).then(function(response) {
+        $scope.people.push(response.data);
+        $scope.newPersonName = null;
+        $scope.newPersonBio = null;
+      }, function(errors) {
+        $scope.errors = errors.data;
+      });
       
-    }
+    };
 
     $scope.toggleBio = function(person){
       person.bioVisible = !person.bioVisible;
